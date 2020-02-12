@@ -1,0 +1,56 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Base */
+
+
+/* Layout */
+
+.images-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, auto));
+    grid-gap: 10px;
+}
+
+/* navbar */
+
+.logo img {
+    width: 200px;
+    height: 50px;
+}
+
+/* images container */
+
+.images-container img {
+    width: 100%;
+}
+
+/* editor container  */
+
+.editor-container {
+    margin: 0 auto;
+    height: 500px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.editor-controlers{
+    width: 50%;
+}
+
+/* helpers */
+ .flex{
+     display: flex;
+ }
+ .space-between{
+     justify-content: space-between;
+ }
+
+/* list helpers */
+
+.clean-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}

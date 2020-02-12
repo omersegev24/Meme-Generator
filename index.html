@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body onload="onInit()">
+
+    <header class="main-header">
+        <nav class="main-nav flex space-between">
+            <div class="logo"><img src="logo/LOGO.png" alt="logo"></div>
+            <ul class="nav-content clean-list">
+                <li class="nav-btn"><a href="#">Gallery</a></li>
+                <li class="nav-btn"><a href="#">Memes</a></li>
+                <li class="nav-btn"><a href="#">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="editor-container flex">
+        <canvas class="editor-canvas" max-width="500" max-height="500" style="border: 1px solid black"></canvas>
+        <div class="editor-controlers">
+            <input type="text" class="meme-text">
+            <button onclick="onChangeFontSize(-1)" class="">A-</button>
+            <button onclick="onChangeFontSize(1)" class="">A+</button>
+            <button onclick="onMoveText('down')" class="line-down">↓</button>
+            <button onclick="onMoveText('up')" class="line-up">↑</button>
+            <button onclick="onSwitchLine()" class="switch-line">switch line</button>
+            <button onclick="addLine()" class="add-line">+</button>
+
+            <button onclick="onDeleteLine()" class="delete">delete</button>
+
+        </div>
+    </section>
+
+    <section class="images-container"></section>
+
+    <script src="js/meme-service.js"></script>
+    <script src="js/meme-controler.js"></script>
+</body>
+
+</html>
