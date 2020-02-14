@@ -17,25 +17,25 @@
                 <li onclick="onToggleMenu(this)" class="nav-link"><a href="#">Memes</a></li>
                 <li onclick="onToggleMenu(this)" class="nav-link open gallery"><a href="#">Gallery</a></li>
                 <li onclick="onToggleMenu(this)" class="nav-link"><a href="#">About</a></li>
-                <li class="btn-menu"><a class="icon" onclick="openMenu()">menu</a></li>
+                <li class="btn-menu"><a class="icon" onclick="openMenu()"><i class="fas fa-bars"></i></a></li>
             </ul>
         </nav>
     </header>
 
     <section class="editor-container">
         <div class="canvas-container flex">
-            <button class="btn btn-back" onclick="onToggleMenu('Gallery' , true)"> Back to Gallery</button>
+            <button class="btn btn-back" onclick="onToggleMenu('Gallery' , true)"><i class="fas fa-chevron-left"></i> Back to Gallery</button>
             <canvas class="editor-canvas" width="500" height="500" style="border: 1px solid black"></canvas>
         </div>
         <div class="editor-controlers">
             <div class="main-controls flex space-between align-center">
                 <h3>Edit Text Lines</h3>
                 <div>
-                    <button onclick="onSwitchLine()" class="btn btn-switch-line">switch line</button>
+                    <button onclick="onSwitchLine()" class="btn btn-switch-line">1/2</button>
                     <button onclick="onMoveText('up')" class="btn btn-line-up">↑</button>
                     <button onclick="onMoveText('down')" class="btn btn-line-down">↓</button>
-                    <button onclick="onAddLine()" class="btn btn-add-line">+</button>
-                    <button onclick="onDeleteLine()" class="btn btn-delete">delete</button>
+                    <button onclick="onAddLine()" class="btn btn-add-line"><i class="far fa-plus-square"></i></button>
+                    <button onclick="onDeleteLine()" class="btn btn-delete"><i class="far fa-trash-alt"></i></button>
                 </div>
             </div>
 
@@ -47,18 +47,22 @@
                     <button onclick="onChangeFontSize(-1)" class="btn btn-font-plus">A-</button>
                     <button onclick="onChangeFontSize(1)" class="btn btn-font-minus">A+</button>
                     <a>|</a>
-                    <button class="btn alignment" onclick="onAlignText(value, true)" value="left">left</button>
-                    <button class="btn alignment" onclick="onAlignText(value, true)" value="center">center</button>
-                    <button class="btn alignment" onclick="onAlignText(value, true)" value="right">right</button>
+                    <button class="btn alignment" onclick="onAlignText(value, true)" value="left"><i class="fas fa-align-left"></i></button>
+                    <button class="btn alignment" onclick="onAlignText(value, true)" value="center"><i class="fas fa-align-center"></i></button>
+                    <button class="btn alignment" onclick="onAlignText(value, true)" value="right"><i class="fas fa-align-right"></i></button>
                     <a>|</a>
-                    <input type="color" id="color" class="font-color" value="#ffffff">
-                    <label for="color">color</label>
+                    <input type="color" id="color" onchange="onPickColor()" class="font-color" value="#ffffff">
+                    <label class="btn" for="color"><i class="fas fa-pen-fancy"></i></label>
                 </div>
                 <input type="text" class="meme-text">
-                <!-- <textarea class="meme-text" name="message" rows="4" cols="30"></textarea> -->
             </div>
-
-            <button class="btn-share">Share</button>
+            
+            <div class="third-controls flex space-between">
+                <button class="save link" onclick="onSaveMeme()">Save</button>
+                <a href="#" class="download link" onclick="downloadCanvas(this)" download="my-meme.jpg">Download</a>
+                <form method="POST" enctype="multipart/form-data" onclick="uploadImg(this, event)" class="share link">Share</form>
+                <input name="img" id="imgData" type="hidden" />
+            </div>
 
 
 
@@ -70,11 +74,12 @@
             <input class="search-input" type="text" onchange="onSearchImg(value)" placeholder="Search">
         </div>
         <div class="images-container"></div>
+        <div class="images-memes-container"></div>
     </section>
 
-
+    <script src="https://kit.fontawesome.com/1a694d3c39.js" crossorigin="anonymous"></script>
     <script src="js/meme-service.js"></script>
-    <script src="js/grid-implemnt.js"></script>
+    <script src="js/upload-service.js"></script>
     <script src="js/meme-controler.js"></script>
 </body>
 

@@ -1,12 +1,13 @@
 'use strict;'
 
-var gCanvas;
-var gCtx;
-var gAddLine = 0;
-var gText;
-var gSearch;
-var gFilter = '';
-
+var gCanvas,
+    gCtx,
+    gAddLine = 0,
+    gText,
+    gSearch,
+    gFilter = '',
+    gMemeImgs = [],
+    gMove = false;
 
 
 
@@ -52,7 +53,8 @@ var gMeme = {
             align: 'center',
             color: 'white',
             y: 10,
-            x: 0
+            x: 0,
+            width: 0
         }
     ]
 };
@@ -62,6 +64,78 @@ function init() {
     gText.addEventListener('keydown', drawMeme);
     gText.addEventListener('keyup', drawMeme);
     gText.addEventListener('change', drawMeme);
+
+    gCanvas.addEventListener('mousedown', (ev) => {
+        mouseMoveHandle('down', ev);
+    });
+    gCanvas.addEventListener('mousemove', (ev) => {
+        mouseMoveHandle('move', ev);
+    });
+    gCanvas.addEventListener('mouseup', (ev) => {
+        mouseMoveHandle('up', ev);
+    });
+    gCanvas.addEventListener('mouseout', (ev) => {
+        mouseMoveHandle('out', ev);
+    });
+
+    gCanvas.addEventListener("touchstart", function (ev) {
+        touchMoveHandle(ev);
+    }, false);
+    gCanvas.addEventListener("touchmove", function (ev) {
+        touchMoveHandle(ev);
+    }, false);
+    gCanvas.addEventListener("touchend", function () {
+        gCanvas.touchmove = null;
+    }, false);
+}
+
+function getMousePos(gCanvas, ev) {
+    var rect = gCanvas.getBoundingClientRect();
+    return {
+        x: ev.clientX - rect.left,
+        y: ev.clientY - rect.top
+    };
+}
+function getTouchPos(canvasDom, touchEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return {
+        x: touchEvent.touches[0].clientX - rect.left,
+        y: touchEvent.touches[0].clientY - rect.top
+    };
+}
+
+function touchMoveHandle(ev){
+    var { x, y } = getTouchPos(gCanvas, ev);
+        gMeme.lines[gMeme.selectedLineIdx].x = x;
+        gMeme.lines[gMeme.selectedLineIdx].y = y;
+        drawMeme();
+}
+
+function mouseMoveHandle(mouse, ev) {
+    if (mouse === 'down') {
+        gMeme.lines[gMeme.selectedLineIdx].align = 'custome';
+        var { offsetX, offsetY } = ev
+        // var clickedLine = gMeme.lines.find(line => {
+        //     return offsetX > line.x
+        //         && offsetX < line.x + line.width
+        //         && offsetY > line.y
+        //         && offsetY < gCanvas.height
+        // })
+        // if (clickedLine) {
+            gMove = true;
+        // }
+    }
+    if (mouse === 'up' || mouse === 'out') {
+        gMove = false;
+    }
+    if (mouse === 'move') {
+        if (gMove) {
+            var pos = getMousePos(gCanvas, ev);
+            gMeme.lines[gMeme.selectedLineIdx].x = pos.x;
+            gMeme.lines[gMeme.selectedLineIdx].y = pos.y;
+            drawMeme();
+        }
+    }
 }
 
 function creatImg(id, ...keyWords) {
@@ -69,6 +143,7 @@ function creatImg(id, ...keyWords) {
         id: id,
         url: `images/${id}.jpg`,
         keywords: [...keyWords]
+        // lines:{}
     }
     return img;
 }
@@ -77,7 +152,7 @@ function creatImgs() {
     let i = 1
     var images = [];
     while (i !== 25) {
-        keys = gKeys[i];
+        keys = gKeys[i - 1];
         images.push(creatImg(i, keys));
         i++;
     }
@@ -100,21 +175,40 @@ function setCtxContent(line) {
     gCtx.fillStyle = line.color;
     gCtx.textAlign = line.align;
     gCtx.textBaseline = 'top';
+
+    if (line.align === 'custome') return;
     alignText(line.align);
 }
 
-function getLineForDisplay(){
+function getLineForDisplay() {
     if (!gMeme.lines.length) return;
     return gMeme.lines;
 }
 
 function getImgsForDisplay() {
-    if(!gFilter) return gImgs;
+    if (!gFilter) return gImgs;
     var images = gImgs.filter(img => img.keywords[0].includes(gFilter));
     return images;
 }
 
-function downloadCanvas(elLink) {
+function getMemeImgs() {
+    var val = localStorage.getItem('Memes');
+    var obj = JSON.parse(val);
+    // gMeme.lines[obj.id] = obj.lines;
+
+    return obj;
+}
+
+function saveMemeToLocal() {
+    var img = gImgs[gMeme.selectedImgId - 1];
+    img.url = gCanvas.toDataURL("image/jpeg");
+    img.width = gCanvas.width;
+    img.height = gCanvas.height
+    gMemeImgs.push(img);
+    localStorage.setItem('Memes', JSON.stringify(gMemeImgs));
+}
+
+function downloadgCanvas(elLink) {
     const data = gCanvas.toDataURL()
     elLink.href = data
     elLink.download = 'Meme'
@@ -143,7 +237,7 @@ function drawMeme() {
     }
     var text = document.querySelector('.meme-text').value;
     text = text.toUpperCase();
-    
+
     if (text === '') text = 'PUT TEXT HERE...';
     var currLine = gMeme.lines[gMeme.selectedLineIdx];
 
@@ -151,6 +245,7 @@ function drawMeme() {
     setCtxContent(currLine);
     wrapText(text, currLine.x, currLine.y);
 }
+
 
 function wrapText(text, x, y) {
     var lines = [];
@@ -161,6 +256,7 @@ function wrapText(text, x, y) {
         var testLine = (i === 0) ? words[i] : line + ' ' + words[i];
         var metrics = gCtx.measureText(testLine);
         var testWidth = metrics.width;
+        gMeme.lines[gMeme.selectedLineIdx].width = testWidth;
 
         if (testWidth < gCanvas.width) line = testLine;
         else {
@@ -169,11 +265,11 @@ function wrapText(text, x, y) {
         }
     }
     lines.push(line);
-    for (var line in lines) {
-        gCtx.strokeText(lines[line], x, y);
-        gCtx.fillText(lines[line], x, y);
-        renderLines();
-    }
+    // for (let line in lines) {
+    //     gCtx.strokeText(lines[line], x, y);
+    //     gCtx.fillText(lines[line], x, y);
+    renderLines();
+    // }
 }
 
 function changeFont(diff) {
@@ -207,7 +303,6 @@ function addLine() {
     };
     if (gMeme.lines.length === 0) line.y = 10;
     line.y = (gMeme.lines.length < 2) ? gCanvas.height - gCtx.lineHeight - 10 : gCanvas.height / 2;
-debugger;
     gMeme.lines.push(line);
     drawMeme();
     gAddLine++;
@@ -233,8 +328,14 @@ function alignText(val, isClicked = false) {
     // drawMeme();
 }
 
-function searchImg(val){
+function searchImg(val) {
     gFilter = val;
     renderImages();
     resizeAllGridItems();
 }
+
+function pickColor(val) {
+    gMeme.lines[gMeme.selectedLineIdx].color = val;
+    renderLines();
+}
+

@@ -32,9 +32,20 @@ h3 {
     font-size: 1.5rem;
 }
 
+.btn:hover {
+    color: #FF9826;
+}
+
 /* Layout */
 
 .images-container {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-auto-rows: 10px;
+}
+
+.images-memes-container {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -54,6 +65,7 @@ h3 {
     text-align: center;
     color: #989898;
     padding: 25px 15px;
+    cursor: pointer;
 }
 
 .nav-content a:hover {
@@ -67,7 +79,6 @@ h3 {
 .open a {
     color: #FF9826;
 }
-
 
 /* header */
 
@@ -94,6 +105,13 @@ h3 {
     max-width: 100%;
     height: auto;
     border-radius: 20px;
+    cursor: pointer;
+}
+
+.images-memes-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
 }
 
 .images-container img:hover {
@@ -108,12 +126,6 @@ h3 {
     height: 100%;
 }
 
-.btn {
-    background-color: white;
-    width: fit-content;
-    height: fit-content;
-}
-
 .editor-controlers {
     display: flex;
     flex-direction: column;
@@ -123,8 +135,9 @@ h3 {
 }
 
 .btn {
+    background: none;
     color: #727272;
-    border: 0em;
+    border: 0;
     cursor: pointer;
 }
 
@@ -180,6 +193,8 @@ select {
     position: relative;
     top: 25px;
     left: 25px;
+    background: none;
+    align-self: flex-start;
 }
 
 .editor-canvas {
@@ -187,7 +202,7 @@ select {
     border-radius: 10px;
 }
 
-.btn-share {
+.link {
     text-transform: uppercase;
     background: #FF9826;
     border: 1px solid #FF9826;
@@ -196,8 +211,14 @@ select {
     color: #FFFFFF;
     text-align: center;
     padding: 15px 35px;
-    margin: 0 30px;
+    margin: 0 auto;
     align-self: flex-end;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.link:hover{
+    opacity: 0.4;
 }
 
 /* helpers */
@@ -230,24 +251,50 @@ select {
         width: 100%;
     }
     .canvas-container {
+        background-color: #E5E5E5;
         width: 100%;
     }
     .editor-canvas {
-        margin: 50px auto;
+        margin: 30px;
+        align-self: center;
     }
     .editor-controlers {
         width: 100%;
+        background-color: #FFFFFF;
     }
-    .btn-share{
+    .link {
         align-self: stretch;
     }
 }
 
 @media screen and (max-width: 1024px) {
-    .nav-content>*:not(:last-child)  {
+    .nav-content>*:not(:last-child) {
         display: none;
     }
     .nav-content .btn-menu {
         display: block;
     }
+}
+
+@media screen and (max-width: 600px) {
+    h3 {
+        font-size: 18px;
+    }
+    select {
+        width: 100%;
+        padding: 0 20px;
+        margin-bottom: 15px;
+    }
+    .edit-nav {
+        flex-wrap: wrap;
+    }
+    .link {
+        align-self: stretch;
+        margin: 0 10px 10px;
+    }
+
+    .third-controls {
+        flex-direction: column;
+    }
+   
 }
