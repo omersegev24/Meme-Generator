@@ -17,14 +17,14 @@ function renderCanvas() {
     setCtx(ctx);
 }
 
-function mouseDown(e){
+function mouseDown(e) {
     console.log(e);
 }
 
-function resizeCanvas() {
+function onResizeCanvas() {
     var elContainer = document.querySelector('.editor-container');
-    gCanvas.width = ((elContainer.offsetWidth / 2) > 500) ? 500 : elContainer.offsetWidth / 2;
-    gCanvas.height = elContainer.offsetHeight;
+    resizeCanvas(elContainer);
+   
 }
 
 function renderImages(isMemePage = false) {
@@ -34,7 +34,7 @@ function renderImages(isMemePage = false) {
 
     if (isMemePage) {
         var strHtml = images.map(img => {
-            return `<img class="item" src="${img.url}" alt="${img.keywords}"></img>`;
+            return `<a href="${img.url}" download="my-meme.jpg"><img class="item" src="${img.url}" alt="${img.keywords}"></a></img>`;
         });
     } else {
         var strHtml = images.map(img => {
@@ -49,11 +49,7 @@ function renderImages(isMemePage = false) {
 
 function renderLines() {
     var lines = getLineForDisplay();
-    lines.forEach(line => {
-        setCtxContent(line);
-        gCtx.strokeText(line.txt, line.x, line.y);
-        gCtx.fillText(line.txt, line.x, line.y);
-    })
+    drawText(lines);
 }
 
 function onSelectImage(id) {
@@ -120,6 +116,8 @@ function changePage(pageName) {
             elImgCon.style = 'display: none;';
             elEditContainer.style = 'display: flex;';
     }
+
+    if (document.body.classList.contains('menu-open')) handleMobileMenu();
 }
 
 function onAlignText(value, isClicked) {
@@ -127,7 +125,8 @@ function onAlignText(value, isClicked) {
 }
 
 function downloadCanvas(elLink) {
-    const data = gCanvas.toDataURL()
+    var canvas = getCanvas();
+    const data = canvas.toDataURL();
     elLink.href = data
     elLink.download = 'meme.jpg';
 }
@@ -136,8 +135,11 @@ function onSearchImg(val) {
     searchImg(val);
 }
 
-function openMenu() {
+function handleMobileMenu() {
     document.body.classList.toggle('menu-open');
+
+    var elIcon = document.querySelector('.icon');
+    elIcon.innerHTML = (document.body.classList.contains('menu-open')) ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
 }
 
 function onPickColor() {

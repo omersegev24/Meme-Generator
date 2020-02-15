@@ -7,7 +7,7 @@
 
 @font-face {
     font-family: roboto;
-    src: url(/fonts/Roboto/Roboto-Light.ttf);
+    src: url(../fonts/Roboto/Roboto-Light.ttf);
 }
 
 /* Base */
@@ -24,7 +24,7 @@ header {
 }
 
 nav {
-    border: 1px solid #DBDBDB;
+    border-bottom: 1px solid #DBDBDB;
 }
 
 h3 {
@@ -57,19 +57,34 @@ h3 {
 .logo img {
     width: 150px;
     height: 30px;
-    margin: 10px 20px;
+    margin-left: 20px;
+}
+
+.nav-content li{
+    padding: 20px 0;
 }
 
 .nav-content a {
     text-decoration: none;
     text-align: center;
     color: #989898;
-    padding: 25px 15px;
+    padding: 20px;
     cursor: pointer;
+}
+
+.nav-content .line{
+    display: none;
+    border-bottom: 1px solid #989898;
+    width: 20px;
+    padding: 0;
 }
 
 .nav-content a:hover {
     color: #FF9826;
+}
+
+.btn-menu {
+    padding: 20px 0;
 }
 
 .nav-content .btn-menu {
@@ -79,6 +94,7 @@ h3 {
 .open a {
     color: #FF9826;
 }
+
 
 /* header */
 
@@ -217,7 +233,7 @@ select {
     cursor: pointer;
 }
 
-.link:hover{
+.link:hover {
     opacity: 0.4;
 }
 
@@ -274,6 +290,41 @@ select {
     .nav-content .btn-menu {
         display: block;
     }
+    .menu-open .open a {
+        color: #ffffff;
+        font-weight: 500;
+    }
+    .menu-open .nav-content a:hover{
+        color: white;
+    }
+    .menu-open .nav-content {
+        flex-direction: column;
+        position: fixed;
+        align-items: center;
+        justify-content: space-evenly;
+        top: 0;
+        background: #FF9826;
+        box-shadow: 0px 1px 0px #DBDBDB;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
+    .menu-open {
+        overflow: hidden;
+    }
+    .menu-open .logo {
+        display: none;
+    }
+    .menu-open .nav-content>*:not(:last-child) {
+        display: block;
+        font-size: 1.5rem;
+    }
+    .menu-open .nav-content>*:last-child {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+    }
 }
 
 @media screen and (max-width: 600px) {
@@ -292,9 +343,7 @@ select {
         align-self: stretch;
         margin: 0 10px 10px;
     }
-
     .third-controls {
         flex-direction: column;
     }
-   
 }

@@ -7,8 +7,7 @@ var gCanvas,
     gSearch,
     gFilter = '',
     gMemeImgs = [],
-    gMove = false,
-    gCurrLine;
+    gMove = false;
 
 
 
@@ -90,15 +89,6 @@ function init() {
     }, false);
 }
 
-function resizeCanvas(){
-    gCanvas.width = ((elContainer.offsetWidth / 2) > 500) ? 500 : elContainer.offsetWidth / 2;
-    gCanvas.height = elContainer.offsetHeight;
-}
-
-function getCanvas(){
-    return gCanvas;
-}
-
 function getMousePos(gCanvas, ev) {
     var rect = gCanvas.getBoundingClientRect();
     return {
@@ -106,7 +96,6 @@ function getMousePos(gCanvas, ev) {
         y: ev.clientY - rect.top
     };
 }
-
 function getTouchPos(canvasDom, touchEvent) {
     var rect = canvasDom.getBoundingClientRect();
     return {
@@ -115,33 +104,28 @@ function getTouchPos(canvasDom, touchEvent) {
     };
 }
 
-function touchMoveHandle(ev) {
+function touchMoveHandle(ev){
     var { x, y } = getTouchPos(gCanvas, ev);
-    gMeme.lines[gMeme.selectedLineIdx].x = x;
-    gMeme.lines[gMeme.selectedLineIdx].y = y;
-    drawMeme();
-}
-
-function getlineIdx(txt){
-    var idx = gMeme.lines.findIndex(line => line.txt = txt);
-    return idx;
+        gMeme.lines[gMeme.selectedLineIdx].x = x;
+        gMeme.lines[gMeme.selectedLineIdx].y = y;
+        drawMeme();
 }
 
 function mouseEventHandle(mouse, ev) {
     if (mouse === 'down') {
+        // gMeme.lines[gMeme.selectedLineIdx].align = 'custome';
         var { offsetX, offsetY } = ev;
-        let idx;
-        var clickedLine = gMeme.lines.find((line, index) => {
-            idx = index;
+
+        ///////TODO: fix line align center////// 
+
+        var clickedLine = gMeme.lines.find(line => {
             return offsetX > line.x
                 && offsetX < line.x + line.width
                 && offsetY > line.y
-                && offsetY < line.y + gCanvas.height
+                && offsetY < line.y + line.size
         })
         if (clickedLine) {
             gMove = true;
-            gMeme.lines[idx].align = 'custome';
-            gCurrLine = gMeme.lines[idx];
         }
     }
     if (mouse === 'up' || mouse === 'out') {
@@ -149,10 +133,10 @@ function mouseEventHandle(mouse, ev) {
     }
     if (mouse === 'move') {
         if (gMove) {
+            
             var pos = getMousePos(gCanvas, ev);
-            gCurrLine.x = pos.x;
-            gCurrLine.y = pos.y;
-           
+            gMeme.lines[gMeme.selectedLineIdx].x = pos.x;
+            gMeme.lines[gMeme.selectedLineIdx].y = pos.y;
             drawMeme();
         }
     }
@@ -163,6 +147,7 @@ function creatImg(id, ...keyWords) {
         id: id,
         url: `images/${id}.jpg`,
         keywords: [...keyWords]
+        // lines:{}
     }
     return img;
 }
@@ -213,6 +198,8 @@ function getImgsForDisplay() {
 function getMemeImgs() {
     var val = localStorage.getItem('Memes');
     var obj = JSON.parse(val);
+    // gMeme.lines[obj.id] = obj.lines;
+
     return obj;
 }
 
@@ -220,7 +207,7 @@ function saveMemeToLocal() {
     var img = gImgs[gMeme.selectedImgId - 1];
     img.url = gCanvas.toDataURL("image/jpeg");
     img.width = gCanvas.width;
-    img.height = gCanvas.height;
+    img.height = gCanvas.height
     gMemeImgs.push(img);
     localStorage.setItem('Memes', JSON.stringify(gMemeImgs));
 }
@@ -254,13 +241,15 @@ function drawMeme() {
     }
     var text = document.querySelector('.meme-text').value;
     text = text.toUpperCase();
+
     if (text === '') text = 'PUT TEXT HERE...';
     var currLine = gMeme.lines[gMeme.selectedLineIdx];
-    currLine.txt = text;
 
+    currLine.txt = text;
     setCtxContent(currLine);
     wrapText(text, currLine.x, currLine.y);
 }
+
 
 function wrapText(text, x, y) {
     var lines = [];
@@ -286,15 +275,16 @@ function wrapText(text, x, y) {
     renderLines();
     // }
 }
-
-function drawText(lines) {
-    lines.forEach((line, idx) => {
+function drawText(lines){
+    lines.forEach((line,idx)=> {
         setCtxContent(line);
         gCtx.strokeText(line.txt, line.x, line.y);
         gCtx.fillText(line.txt, line.x, line.y);
         gMeme.lines[idx].width = Math.round(gCtx.measureText(line.txt).width);
     })
 }
+
+
 
 function changeFont(diff) {
     gMeme.lines[gMeme.selectedLineIdx].size += diff;
