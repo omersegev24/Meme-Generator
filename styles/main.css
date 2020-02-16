@@ -9,6 +9,7 @@
     font-family: roboto;
     src: url(../fonts/Roboto/Roboto-Light.ttf);
 }
+
 @font-face {
     font-family: Impact;
     src: url(../fonts/impact.ttf);
@@ -64,7 +65,7 @@ h3 {
     margin-left: 20px;
 }
 
-.nav-content li{
+.nav-content li {
     padding: 20px 0;
 }
 
@@ -76,7 +77,7 @@ h3 {
     cursor: pointer;
 }
 
-.nav-content .line{
+.nav-content .line {
     display: none;
     border-bottom: 1px solid #989898;
     width: 20px;
@@ -98,7 +99,6 @@ h3 {
 .open a {
     color: #FF9826;
 }
-
 
 /* header */
 
@@ -141,7 +141,6 @@ h3 {
 /* editor container  */
 
 .editor-container {
-    grid-row: auto;
     display: none;
     height: 100%;
 }
@@ -186,6 +185,9 @@ h3 {
     border-bottom-right-radius: 10px;
     padding-left: 20px;
 }
+.third-controls{
+    margin-bottom: 50px;
+}
 
 .edit-nav {
     justify-content: space-evenly;
@@ -220,6 +222,12 @@ select {
 .editor-canvas {
     margin: 150px 70px 250px;
     border-radius: 10px;
+    align-self: center;
+    cursor: grab;
+}
+
+.editor-canvas:active {
+    cursor: grabbing;
 }
 
 .link {
@@ -263,6 +271,42 @@ select {
     list-style-type: none;
 }
 
+/* modal toggel saved*/
+
+.pop-up {
+    /* visibility: hidden; */
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: relative;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+}
+
+.pop-up::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
+  .popup .show {
+    visibility: visible;
+    animation: fadeIn 1s;
+  }
 /* quarys */
 
 @media screen and (max-width: 1090px) {
@@ -298,7 +342,7 @@ select {
         color: #ffffff;
         font-weight: 500;
     }
-    .menu-open .nav-content a:hover{
+    .menu-open .nav-content a:hover {
         color: white;
     }
     .menu-open .nav-content {
@@ -331,7 +375,12 @@ select {
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 640px) {
+    .images-container , .images-memes-container {
+        grid-gap: 5px;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-auto-rows: 5px;
+    }
     h3 {
         font-size: 18px;
     }
@@ -343,11 +392,15 @@ select {
     .edit-nav {
         flex-wrap: wrap;
     }
+    .editor-canvas {
+        width: 44vh;
+    }
     .link {
         align-self: stretch;
         margin: 0 10px 10px;
     }
     .third-controls {
         flex-direction: column;
+        margin-bottom: 20px;
     }
 }

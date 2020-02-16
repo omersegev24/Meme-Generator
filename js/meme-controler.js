@@ -8,6 +8,7 @@ function onInit() {
     renderLines();
     init();
     setTimeout(resizeAllGridItems, 100);
+
 }
 
 function renderCanvas() {
@@ -15,10 +16,6 @@ function renderCanvas() {
     var ctx = canvas.getContext('2d');
     setCanvas(canvas);
     setCtx(ctx);
-}
-
-function mouseDown(e) {
-    console.log(e);
 }
 
 function onResizeCanvas() {
@@ -144,9 +141,9 @@ function handleMobileMenu() {
 
 function onPickColor() {
     var val = document.querySelector('.font-color').value;
-    console.log(val)
     pickColor(val);
 }
+
 
 function resizeGridItem(item) {
     var selector = (isPageMeme) ? 'images-memes-container' : 'images-container';

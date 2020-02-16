@@ -1,6 +1,7 @@
 
 // on submit call to this function
 function uploadImg(elForm, ev) {
+    drawMeme(true);
     ev.preventDefault();
     document.getElementById('imgData').value = gCanvas.toDataURL("image/jpeg");
 
