@@ -21,7 +21,7 @@ function renderCanvas() {
 function onResizeCanvas() {
     var elContainer = document.querySelector('.editor-container');
     resizeCanvas(elContainer);
-   
+
 }
 
 function renderImages(isMemePage = false) {
@@ -169,5 +169,3 @@ function resizeInstance(instance) {
 function onSaveMeme() {
     saveMemeToLocal();
 }
-
-
